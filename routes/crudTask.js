@@ -3,7 +3,6 @@ const bdd = require('../bdd');
 const router = express.Router();
 
 
-
 // route creation tasks
 router.post('/createTask', (req, res) => {
     const {nameTask, descriptionTask} = req.body;
@@ -23,7 +22,6 @@ router.get('/readTask', (req, res) => {
         res.json(results);
     });
 });
-
 
 // route mise à jour des utilisateurs
 router.post('/updateTask/:idTask', (req, res) => {
