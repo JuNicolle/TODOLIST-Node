@@ -7,9 +7,9 @@ const router = express.Router();
 router.post('/createTask', (req, res) => {
     const {nameTask, descriptionTask} = req.body;
     const insertTask = "INSERT INTO tasks (nameTask, descriptionTask) VALUES (?,?);"
-    bdd.query(insertTask, [nameTask, descriptionTask], (error)=>{
+    bdd.query(insertTask, [nameTask, descriptionTask], (error, results)=>{
         if(error) throw error;
-        res.send('Tâche créée avec succès !');
+        res.json(results);
         // res.redirect('http://localhost:5173/createUser');
     });
 });
@@ -19,7 +19,7 @@ router.get('/readTask', (req, res) => {
     const readTasks = "SELECT * FROM tasks;"
     bdd.query(readTasks, (error, results)=>{
         if(error) throw error;
-        res.json(results);
+        res.json(results);  
     });
 });
 
@@ -36,8 +36,20 @@ router.post('/updateTask/:idTask', (req, res) => {
     });
 });
 
+// route validation d'une tâche
+router.post('/validateTask/:idTask', (req, res) => {
+    const { idTask } = req.params;
+    const newState = 2; 
+
+    const updateState = "UPDATE tasks SET idState = ? WHERE idTask = ?";
+    bdd.query(updateState, [newState, idTask], (error, results) => {
+        if (error) throw error;
+        res.json({ message: "Task updated successfully", results });
+    });
+});
+
 // route suppression des utilisateurs
-router.post('/deleteTask/:idTask', (req, res) => {
+router.delete('/deleteTask/:idTask', (req, res) => {
     const { idTask } = req.params;
 
     const deleteTask = "DELETE FROM tasks WHERE idTask = ?;";
